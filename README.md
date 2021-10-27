@@ -1,6 +1,6 @@
 # react_calendar
 
-### [Calendar link](https://infallible-blackwell-b27ab4.netlify.app/)
+### [Calendar link](https://calendar-react-gas.netlify.app/)
 ### The tech stack is:
 
 - [HTML5](https://en.wikipedia.org/wiki/HTML5)
