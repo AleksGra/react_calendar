@@ -42,7 +42,7 @@ export function createEvent(event) {
   );
   const [title, date, startTime, endTime, description] = fieldEl;
 
-  return postEvent({
+  return eventData({
     title,
     description,
     dateFrom: new Date(`${date} ${startTime}`),
