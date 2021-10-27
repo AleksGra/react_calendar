@@ -1,26 +1,64 @@
-import React from "react";
+import React, { useState } from 'react';
+import './header.scss';
+import { months } from '../../utils/dateUtils.js';
+import Modal from '../modal/Modal.jsx';
 
-import { months } from "../../utils/dateUtils.js";
+const Header = ({
+  weekDates,
+  onNextWeek,
+  onPrevWeek,
+  onToday,
+  onCreateEvent,
+}) => {
+  const [isHideModal, setHideModal] = useState(false);
 
-import "./header.scss";
+  let displayedMonth;
+  weekDates[0].getMonth() === weekDates[weekDates.length - 1].getMonth()
+    ? (displayedMonth = months[weekDates[0].getMonth()])
+    : (displayedMonth = `${months[weekDates[0].getMonth()]} - ${
+        months[weekDates[weekDates.length - 1].getMonth()]
+      }`);
 
-const Header = () => {
   return (
-    <header className="header">
-      <button className="button create-event-btn">
-        <i className="fas fa-plus create-event-btn__icon"></i>Create
-      </button>
-      <div className="navigation">
-        <button className="navigation__today-btn button">Today</button>
-        <button className="icon-button navigation__nav-icon">
-          <i className="fas fa-chevron-left"></i>
+    <>
+      {!isHideModal ? null : (
+        <Modal
+          onCreateEvent={onCreateEvent}
+          onCloseModal={() => setHideModal(false)}
+        />
+      )}
+
+      <header className='header'>
+        <button
+          className='button create-event-btn'
+          onClick={() => setHideModal(true)}
+        >
+          <i className='fas fa-plus create-event-btn__icon'></i>Create
         </button>
-        <button className="icon-button navigation__nav-icon">
-          <i className="fas fa-chevron-right"></i>
-        </button>
-        <span className="navigation__displayed-month"></span>
-      </div>
-    </header>
+
+        <div className='navigation'>
+          <button className='navigation__today-btn button' onClick={onToday}>
+            Today
+          </button>
+
+          <button
+            className='icon-button navigation__nav-icon'
+            onClick={onPrevWeek}
+          >
+            <i className='fas fa-chevron-left'></i>
+          </button>
+
+          <button
+            className='icon-button navigation__nav-icon'
+            onClick={onNextWeek}
+          >
+            <i className='fas fa-chevron-right'></i>
+          </button>
+
+          <span className='navigation__displayed-month'>{displayedMonth}</span>
+        </div>
+      </header>
+    </>
   );
 };
 

@@ -1,13 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
+import RedLine from './RedLine.jsx';
+import './hour.scss';
 
-import Event from "../event/Event";
-import { formatMins } from "../../../src/utils/dateUtils.js";
+import Event from '../event/Event';
+import { formatMins } from '../../../src/utils/dateUtils.js';
 
-const Hour = ({ dataHour, hourEvents }) => {
+const Hour = ({
+  onDeleteEvent,
+  isCurrentHour,
+  dataHour,
+  hourEvents,
+  weekDay,
+}) => {
+  const [redLineTop, setRedLineTop] = useState(new Date().getMinutes());
+
+  const style = {
+    top: redLineTop,
+  };
+
+  useEffect(() => {
+    const id = setInterval(() => setRedLineTop(redLineTop + 1), 1000 * 60);
+    return () => clearTimeout(id);
+  });
+
   return (
-    <div className="calendar__time-slot" data-time={dataHour + 1}>
-      {/* if no events in the current hour nothing will render here */}
-      {hourEvents.map(({ id, dateFrom, dateTo, title }) => {
+    <div className='calendar__time-slot' data-time={dataHour + 1}>
+      {!isCurrentHour ? null : <RedLine style={style} />}
+
+      {hourEvents.map(({ id, dateFrom, dateTo, title, description }) => {
         const eventStart = `${dateFrom.getHours()}:${formatMins(
           dateFrom.getMinutes()
         )}`;
@@ -17,12 +37,15 @@ const Hour = ({ dataHour, hourEvents }) => {
 
         return (
           <Event
+            onDeleteEvent={onDeleteEvent}
             key={id}
-            //calculating event height = duration of event in minutes
+            eventId={id}
+            weekDay={weekDay}
             height={(dateTo.getTime() - dateFrom.getTime()) / (1000 * 60)}
             marginTop={dateFrom.getMinutes()}
             time={`${eventStart} - ${eventEnd}`}
             title={title}
+            description={description}
           />
         );
       })}

@@ -1,23 +1,33 @@
-import React from "react";
-import Hour from "../hour/Hour";
+import React from 'react';
+import Hour from '../hour/Hour';
 
-import "./day.scss";
+import moment from 'moment';
 
-const Day = ({ dataDay, dayEvents }) => {
+const Day = ({ onDeleteEvent, dayStart, dataDay, dayEvents, weekDay }) => {
   const hours = Array(24)
     .fill()
     .map((val, index) => index);
 
   return (
-    <div className="calendar__day" data-day={dataDay}>
+    <div className='calendar__day' data-day={dataDay}>
       {hours.map((hour) => {
-        //getting all events from the day we will render
         const hourEvents = dayEvents.filter(
           (event) => event.dateFrom.getHours() === hour
         );
 
         return (
-          <Hour key={dataDay + hour} dataHour={hour} hourEvents={hourEvents} />
+          <Hour
+            onDeleteEvent={onDeleteEvent}
+            key={dataDay + hour}
+            isCurrentHour={
+              moment(dayStart).format('M D Y') ===
+                moment(new Date()).format('M D Y') &&
+              hour === new Date().getHours()
+            }
+            weekDay={weekDay}
+            dataHour={hour}
+            hourEvents={hourEvents}
+          />
         );
       })}
     </div>
