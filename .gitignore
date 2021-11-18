@@ -1,13 +1,11 @@
 node_modules
-<<<<<<< HEAD
 .idea
 .VS_Code
 package-lock.json
 build
-=======
 /dist
 /build
 .idea
 .VS_Code
 package-lock.json
->>>>>>> 8cd45ae8ed75231eaae4f8f63a76b4580d59a888
+
