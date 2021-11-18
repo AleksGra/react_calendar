@@ -21,7 +21,7 @@ const Header = ({
 
   return (
     <>
-      {!isHideModal ? null : (
+      {isHideModal && (
         <Modal
           onCreateEvent={onCreateEvent}
           onCloseModal={() => setHideModal(false)}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import RedLine from './RedLine.jsx';
 import './hour.scss';
 
@@ -12,20 +12,9 @@ const Hour = ({
   hourEvents,
   weekDay,
 }) => {
-  const [redLineTop, setRedLineTop] = useState(new Date().getMinutes());
-
-  const style = {
-    top: redLineTop,
-  };
-
-  useEffect(() => {
-    const id = setInterval(() => setRedLineTop(redLineTop + 1), 1000 * 60);
-    return () => clearTimeout(id);
-  });
-
   return (
     <div className='calendar__time-slot' data-time={dataHour + 1}>
-      {!isCurrentHour ? null : <RedLine style={style} />}
+      {isCurrentHour && <RedLine />}
 
       {hourEvents.map(({ id, dateFrom, dateTo, title, description }) => {
         const eventStart = `${dateFrom.getHours()}:${formatMins(

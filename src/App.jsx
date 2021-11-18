@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './common.scss';
 import Calendar from './components/calendar/Calendar.jsx';
 import Header from './components/header/Header.jsx';
-import { deleteEvent, createEvent, fetchEvents } from './gateway/events';
+import { deleteEvent, fetchEvents, postEventData } from './gateway/events';
 import { getWeekStartDate, generateWeekRange } from '../src/utils/dateUtils.js';
 
 const App = () => {
   const [weekStartDate, setWeekStartDate] = useState(new Date());
-  const [events, setEvents] = useState([]);
+  const [eventsList, setEventsList] = useState([]);
   const weekDates = generateWeekRange(getWeekStartDate(weekStartDate));
-
   const handleToday = () => {
     setWeekStartDate(new Date());
   };
@@ -26,30 +25,37 @@ const App = () => {
     );
   };
 
-  const eventsList = () => {
+  const getEventsList = () => {
     fetchEvents().then((response) => {
-      setEvents(
-        response.map((el) => ({
-          ...el,
-          dateFrom: new Date(el.dateFrom),
-          dateTo: new Date(el.dateTo),
-        }))
-      );
+      const newEventsList = response.map((event) => ({
+        ...event,
+        dateFrom: new Date(event.dateFrom),
+        dateTo: new Date(event.dateTo),
+      }));
+      setEventsList(newEventsList);
     });
   };
 
-  const handleCreateEvent = (event) =>
-    createEvent(event).then(() => {
-      eventsList();
-    });
+  const createEvent = (e, eventData) => {
+    e.preventDefault();
+    const { date, description, endTime, startTime, title } = eventData;
+    const newEvent = {
+      title,
+      description,
+      dateFrom: new Date(`${date} ${startTime}`),
+      dateTo: new Date(`${date} ${endTime}`),
+    };
+
+    postEventData(newEvent).then(() => getEventsList());
+  };
 
   const handleDeleteEvent = (eventId) =>
     deleteEvent(eventId).then(() => {
-      eventsList();
+      getEventsList();
     });
 
   useEffect(() => {
-    eventsList();
+    getEventsList();
   }, []);
 
   return (
@@ -59,11 +65,11 @@ const App = () => {
         onToday={handleToday}
         onNextWeek={handleNextWeek}
         onPrevWeek={handlePrevWeek}
-        onCreateEvent={handleCreateEvent}
+        onCreateEvent={createEvent}
       />
       <Calendar
         onDeleteEvent={handleDeleteEvent}
-        events={events}
+        events={eventsList}
         weekDates={weekDates}
       />
     </>

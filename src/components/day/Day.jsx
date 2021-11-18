@@ -1,6 +1,5 @@
 import React from 'react';
 import Hour from '../hour/Hour';
-
 import moment from 'moment';
 
 const Day = ({ onDeleteEvent, dayStart, dataDay, dayEvents, weekDay }) => {

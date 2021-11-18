@@ -11,7 +11,7 @@ export async function fetchEvents() {
   }
 }
 
-export const eventData = async (eventData) => {
+export const postEventData = async (eventData) => {
   try {
     return fetch(baseUrl, {
       method: 'POST',
@@ -34,18 +34,3 @@ export const deleteEvent = async (taskId) => {
     alert("Internal Server Error. Can't display events");
   }
 };
-
-export function createEvent(event) {
-  event.preventDefault();
-  const fieldEl = [...document.querySelectorAll('.event-form__field')].map(
-    (el) => el.value
-  );
-  const [title, date, startTime, endTime, description] = fieldEl;
-
-  return eventData({
-    title,
-    description,
-    dateFrom: new Date(`${date} ${startTime}`),
-    dateTo: new Date(`${date} ${endTime}`),
-  });
-}
