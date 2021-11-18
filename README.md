@@ -1,9 +1,5 @@
 # react_calendar
 
-<<<<<<< HEAD
-
-=======
-
 ### [Calendar link](https://calendar-react-gas.netlify.app/)
 
 To build project in production mode use command: `npm run build`
